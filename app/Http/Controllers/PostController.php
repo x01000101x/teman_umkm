@@ -27,4 +27,9 @@ class PostController extends Controller
         ], 200);
     }
 
+    public function showById($id)
+    {
+        return Post::where('id', $id)->first();
+    }
+
 }

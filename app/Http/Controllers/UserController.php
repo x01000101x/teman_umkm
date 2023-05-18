@@ -6,6 +6,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class UserController extends Controller
 {
@@ -57,6 +58,15 @@ class UserController extends Controller
     {
         $user = request()->user();
         $user->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'berhasil logout'
+        ]);
+    }
+
+    public function logoutById($id)
+    {
+        PersonalAccessToken::where("tokenable_id", $id)->delete();
 
         return response()->json([
             'message' => 'berhasil logout'
