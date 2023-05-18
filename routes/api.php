@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -24,12 +25,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('/showPost', [PostController::class, 'index']);
     Route::get('/showPost/{id}', [PostController::class, 'showById']);
+    Route::get('/order/{id}', [OrderController::class, 'index']);
+    Route::post('/order/{id}', [OrderController::class, 'order']);
+
 
     Route::get('/logout', [UserController::class, 'logout']);
+    Route::delete('/logoutById/{id}', [UserController::class, 'logoutById']);
 });
 
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
-Route::delete('/logout', [UserController::class, 'logout']);
-Route::delete('/logoutById/{id}', [UserController::class, 'logoutById']);
 
