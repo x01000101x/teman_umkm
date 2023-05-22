@@ -27,6 +27,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/showPost/{id}', [PostController::class, 'showById']);
     Route::get('/order/{id}', [OrderController::class, 'index']);
     Route::post('/order/{id}', [OrderController::class, 'order']);
+    Route::post('/reset_password', [UserController::class, 'validateResetPassword']);
+    Route::post('/confirm_new_password', 'AccountsController@resetPassword');
 
 
     Route::get('/logout', [UserController::class, 'logout']);
