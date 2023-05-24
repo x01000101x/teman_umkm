@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Str;
+use \App\Mail\SendMail;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -110,9 +112,15 @@ class UserController extends Controller
         $user = new User;
         $user = $user->where('email', $email)->select('nama', 'email')->first();
 
-        $link = config('base_url') . 'password/reset/' . $token . '?email=' . urlencode($user->email);
+        $link = config('base_url') . 'http://localhost:8000/api/confirm_new_passwords/' . $token;
         try {
-            //Here send the link with CURL with an external email API
+            $details = [
+                'title' => 'Mail from TEMAN UMKM',
+                'body' => 'Berikut link reset password = ' . $link
+            ];
+
+            Mail::to($email)->send(new SendMail($details));
+            // return view('thanks');
                 return true;
             } catch (\Exception $e) {
                 return false;
@@ -172,5 +180,79 @@ class UserController extends Controller
 
 
         }
+
+
+        public function confirmPassword($token){
+            $passwordReset = new PasswordReset;
+            $user = new User;
+            $validator = Validator::make(request()->all(), [
+                'email' => 'required|email|exists:users,email',
+                'password' => 'required']);
+
+
+             if ($validator->fails()) {
+                 return response()->json([
+                    'message' => 'please complete the form'
+                ], 403);
+               }
+
+
+            $password = request('password');
+
+            $tokenData = $passwordReset->where('token', $token)->first();
+
+            if (!$tokenData){
+                return response()->json([
+                    'message' => 'invalid token'
+                ], 400);
+            }
+
+            $userEmail = $user->where('email', $tokenData->email)->first();
+
+            if (!$userEmail){
+                return response()->json([
+                    'message' => 'user not found!'
+                ], 404);
+            };
+
+            $userEmail->password = Hash::make($password);
+            $userEmail->update();
+
+            Auth::login($userEmail);
+
+            $passwordReset->where('email', request('email'))->delete();
+
+            if ($this->sendSuccessEmail($tokenData->email)) {
+                return response()->json([
+                    'message' => 'success'
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'network error, please try again'
+                ], 400);
+            }
+        }
+
+         public function sendSuccessEmail($email)
+        {
+            $details = [
+                'title' => 'Berhasil Update Password!',
+                'body' => 'Password anda telah terupdate!'
+            ];
+
+            Mail::to($email)->send(new SendMail($details));
+            return view('thanks');
+        }
+
+        // public function mailsend()
+        // {
+        //     $details = [
+        //         'title' => 'Title: Mail from TEMAN UMKM',
+        //         'body' => 'Berikut link reset password = '
+        //     ];
+
+        //     Mail::to('leonarddamanik7@gmail.com')->send(new SendMail($details));
+        //     return view('thanks');
+        // }
 
 }
