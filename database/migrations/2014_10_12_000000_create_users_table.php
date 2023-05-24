@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string("no_hp")->unique();
             $table->string("tipe_akun");
             $table->string('password');
+            $table->string("saldo");
             $table->rememberToken();
             $table->timestamps();
         });

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -23,19 +24,31 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
+
+    //Artikel
     Route::get('/showPost', [PostController::class, 'index']);
     Route::get('/showPost/{id}', [PostController::class, 'showById']);
     Route::get('/order/{id}', [OrderController::class, 'index']);
     Route::post('/order/{id}', [OrderController::class, 'order']);
 
 
+    //Logout
     Route::get('/logout', [UserController::class, 'logout']);
     Route::delete('/logoutById/{id}', [UserController::class, 'logoutById']);
+
+
+    //Reset Password
+    Route::post('/reset_password', [UserController::class, 'validateResetPassword']);
+    Route::post('/confirm_new_passwords/{token}', [UserController::class, 'confirmPassword']);
+    // Route::post('/confirm_new_password', [UserController::class, 'resetPassword']);
+    // Route::get('/send-mail',[UserController::class, 'mailsend']);
+
+    //Admin
+    Route::get('/admin/users', [AdminController::class, 'index']);
+    Route::get('/admin/users/{id}', [AdminController::class, 'userById']);
+    Route::post('/admin/topup/{id}', [AdminController::class, 'isiSaldo']);
+
 });
-Route::post('/reset_password', [UserController::class, 'validateResetPassword']);
-Route::post('/confirm_new_password', [UserController::class, 'resetPassword']);
-Route::post('/confirm_new_passwords/{token}', [UserController::class, 'confirmPassword']);
-// Route::get('/send-mail',[UserController::class, 'mailsend']);
 
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);

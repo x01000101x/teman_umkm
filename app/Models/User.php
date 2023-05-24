@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'no_hp',
         'tipe_akun',
+        'saldo',
 
     ];
 

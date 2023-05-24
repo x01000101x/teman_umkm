@@ -68,7 +68,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'berhasil logout'
-        ]);
+        ], 200);
     }
 
     public function logoutById($id)
@@ -77,7 +77,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'berhasil logout'
-        ]);
+        ], 200);
     }
 
     public function validateResetPassword(){
@@ -89,7 +89,7 @@ class UserController extends Controller
         if (count(array($checkEmail)) < 1) {
             return response()->json([
                 'message' => 'user not found!'
-            ]);
+            ], 404);
         }
 
         $passwordReset->email = request('email');
@@ -99,8 +99,8 @@ class UserController extends Controller
 
         if ($this->sendResetEmail($passwordReset->email, $passwordReset->token)){
             return response()->json([
-                'message' => 'success! a reset link has been sent to your email!'
-            ]);
+                'message' => 'success! link reset password telah dikirim ke email anda!'
+            ], 200);
         }else{
             return response()->json([
                 'message' => 'network error, please try again'
@@ -126,61 +126,6 @@ class UserController extends Controller
                 return false;
             }
     }
-
-    public function resetPassword(){
-        $passwordReset = new PasswordReset;
-        $user = new User;
-        $validator = Validator::make(request()->all(), [
-            'email' => 'required|email|exists:users,email',
-            'password' => 'required|confirmed',
-            'token' => 'required' ]);
-
-
-         if ($validator->fails()) {
-             return response()->json([
-                'message' => 'please complete the form'
-            ], 403);
-           }
-
-
-        $password = request('password');
-
-        $tokenData = $passwordReset->where('token', request('token'))->first();
-
-        if (!$tokenData){
-            return response()->json([
-                'message' => 'invalid token'
-            ], 400);
-        }
-
-        $userEmail = $user->where('email', $tokenData->email)->first();
-
-        if (!$userEmail){
-            return response()->json([
-                'message' => 'user not found!'
-            ], 404);
-        };
-
-        $userEmail->password = Hash::make($password);
-        $userEmail->update();
-
-        Auth::login($userEmail);
-
-        $passwordReset->where('email', $user->email)->delete();
-
-        if ($this->sendSuccessEmail($tokenData->email)) {
-            return response()->json([
-                'message' => 'success'
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'network error, please try again'
-            ], 400);
-        }
-
-
-        }
-
 
         public function confirmPassword($token){
             $passwordReset = new PasswordReset;
@@ -225,7 +170,7 @@ class UserController extends Controller
             if ($this->sendSuccessEmail($tokenData->email)) {
                 return response()->json([
                     'message' => 'success'
-                ]);
+                ], 200);
             } else {
                 return response()->json([
                     'message' => 'network error, please try again'
@@ -243,6 +188,61 @@ class UserController extends Controller
             Mail::to($email)->send(new SendMail($details));
             return view('thanks');
         }
+
+
+         // public function resetPassword(){
+    //     $passwordReset = new PasswordReset;
+    //     $user = new User;
+    //     $validator = Validator::make(request()->all(), [
+    //         'email' => 'required|email|exists:users,email',
+    //         'password' => 'required|confirmed',
+    //         'token' => 'required' ]);
+
+
+    //      if ($validator->fails()) {
+    //          return response()->json([
+    //             'message' => 'please complete the form'
+    //         ], 403);
+    //        }
+
+
+    //     $password = request('password');
+
+    //     $tokenData = $passwordReset->where('token', request('token'))->first();
+
+    //     if (!$tokenData){
+    //         return response()->json([
+    //             'message' => 'invalid token'
+    //         ], 400);
+    //     }
+
+    //     $userEmail = $user->where('email', $tokenData->email)->first();
+
+    //     if (!$userEmail){
+    //         return response()->json([
+    //             'message' => 'user not found!'
+    //         ], 404);
+    //     };
+
+    //     $userEmail->password = Hash::make($password);
+    //     $userEmail->update();
+
+    //     Auth::login($userEmail);
+
+    //     $passwordReset->where('email', $user->email)->delete();
+
+    //     if ($this->sendSuccessEmail($tokenData->email)) {
+    //         return response()->json([
+    //             'message' => 'success'
+    //         ]);
+    //     } else {
+    //         return response()->json([
+    //             'message' => 'network error, please try again'
+    //         ], 400);
+    //     }
+
+
+    //     }
 
         // public function mailsend()
         // {
