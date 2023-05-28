@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\FundController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -28,8 +29,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     //Artikel
     Route::get('/showPost', [PostController::class, 'index']);
     Route::get('/showPost/{id}', [PostController::class, 'showById']);
+    Route::post('/showPost', [PostController::class, 'showById']);
+    Route::post('/order/{id}', [PostController::class, 'search']);
     Route::get('/order/{id}', [OrderController::class, 'index']);
-    Route::post('/order/{id}', [OrderController::class, 'order']);
 
 
     //Logout
@@ -47,6 +49,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/admin/users', [AdminController::class, 'index']);
     Route::get('/admin/users/{id}', [AdminController::class, 'userById']);
     Route::post('/admin/topup/{id}', [AdminController::class, 'isiSaldo']);
+
+    //Funds
+    Route::get('/funds', [FundController::class, 'index']);
+    Route::post('/funds/post', [FundController::class, 'create']);
 
 });
 

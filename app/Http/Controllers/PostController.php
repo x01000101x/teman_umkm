@@ -32,4 +32,23 @@ class PostController extends Controller
         return Post::where('id', $id)->first();
     }
 
+    public function search(){
+        $post = new Post;
+
+        $keyword = request("search");
+
+        $search = $post->where('judul', 'LIKE', "%{$keyword}%");
+
+        if(!$search){
+            return response()->json([
+                'data' => 'artikel tidak ada'
+            ], 403);
+        }
+
+        return response()->json([
+            'data' => $search
+        ], 200);
+
+    }
+
 }
