@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FundController;
+use App\Http\Controllers\InvestController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -53,6 +55,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     //Funds
     Route::get('/funds', [FundController::class, 'index']);
     Route::post('/funds/post', [FundController::class, 'create']);
+
+    //Invest
+    Route::get('/invest', [InvestController::class, 'index']);
+    Route::post('invest/{id}', [InvestController::class, 'create']);
+
+    Route::post('/message', [ChatController::class, 'message']);
 
 });
 
