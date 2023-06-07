@@ -75,6 +75,7 @@ class DividenController extends Controller
         $dividen->opsi_pembayaran =request("opsi_pembayaran");
         $dividen->nama_rek = request("nama_rek");
         $dividen->status = "0";
+        $dividen->save();
 
           return response()->json([
               'message' => $dividen

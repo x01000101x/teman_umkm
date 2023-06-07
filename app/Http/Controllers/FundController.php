@@ -60,6 +60,29 @@ class FundController extends Controller
 
     }
 
+    public function cair($id){
+        request()->validate([
+            'nominal' => 'required|string',
+        ]);
+
+        $fund = new Fund;
+
+        $funds = $fund->where('id', $id)->first();
+        if (intval($funds->total_funds) - intval(request('nominal'))  >= 0){
+            $funds->update([
+            'is_cair'     => request('nominal')
+        ]);
+        return response()->json([
+            'message' => 'berhasil cair!',
+            'data' => $funds
+        ], 200);
+    } else{
+        return response()->json([
+            'message' => 'nominal terlalu besar!',
+        ], 403);
+    }
+    }
+
     public function invest(){
 
     }

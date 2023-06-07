@@ -18,6 +18,7 @@ class Fund extends Model
         'total_funds',
         'target_funds',
         'profit',
+        'is_cair',
         'image'
     ];
 }

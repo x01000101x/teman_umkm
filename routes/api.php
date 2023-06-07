@@ -53,10 +53,15 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/admin/users', [AdminController::class, 'index']);
     Route::get('/admin/users/{id}', [AdminController::class, 'userById']);
     Route::post('/admin/topup/{id}', [AdminController::class, 'isiSaldo']);
+    Route::post('/admin/topup/{id}', [AdminController::class, 'isiSaldo']);
+    Route::post('/admin/topup/{id}', [AdminController::class, 'isiSaldo']);
+
 
     //Funds
     Route::get('/funds', [FundController::class, 'index']);
     Route::post('/funds/post', [FundController::class, 'create']);
+    Route::post('/funds/post/{id}', [FundController::class, 'cair']);
+
 
     //Invest
     Route::get('/invest', [InvestController::class, 'index']);
@@ -65,7 +70,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     //Dividen
     Route::get('/dividen', [DividenController::class, 'index']);
-    Route::get('/dividen/{id}', [DividenController::class, 'create']);
+    Route::post('/dividen/{id}', [DividenController::class, 'create']);
 
     //Chat
     Route::post('/message', [ChatController::class, 'message']);
