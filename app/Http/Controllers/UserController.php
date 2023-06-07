@@ -112,7 +112,8 @@ class UserController extends Controller
         $user = new User;
         $user = $user->where('email', $email)->select('nama', 'email')->first();
 
-        $link = config('base_url') . 'http://localhost:8000/api/confirm_new_passwords/' . $token;
+        // $link = config('base_url') . 'http://localhost:8000/api/confirm_new_passwords/' . $token;
+        $link = config('base_url') . 'https://teman-umkm-website/api/confirm_new_passwords/' . $token;
         try {
             $details = [
                 'title' => 'Mail from TEMAN UMKM',

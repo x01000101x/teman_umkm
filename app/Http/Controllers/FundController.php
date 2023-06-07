@@ -37,7 +37,7 @@ class FundController extends Controller
             'end_date' => 'required|string',
             'total_funds' => 'required|string',
             'target_funds' => 'required|string',
-            // 'image' => 'string'
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
         ]);
 
         $id = Auth::id();
