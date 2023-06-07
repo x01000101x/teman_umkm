@@ -6,6 +6,8 @@ use App\Models\Fund;
 use App\Models\Invest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
+
 
 
 class InvestController extends Controller
@@ -38,6 +40,27 @@ class InvestController extends Controller
             'nama_rek' => 'required|string',
         ]);
 
+        $startDate = Carbon::now()->format('d-m-Y');
+        $futureDate = Carbon::now()->addYear()->format('d-m-Y');
+
+       $fund = new Fund;
+
+      $getFund = $fund->where('id', $id)->first();
+
+        if (!$getFund) {
+            return response()->json([
+                'message' => 'maaf UMKM tidak ditemukan'
+            ], 403);
+        }
+
+        $nominal = request('nominal');
+        $percent = floatval($getFund->profit) / 100;
+
+
+        $total = (floatval($getFund->total_funds) + floatval($nominal)) * $percent;
+        $new_total = number_format((float)$total, 2, '.', '');
+
+
         $user_id = Auth::id();
 
         $invest = new Invest;
@@ -47,6 +70,10 @@ class InvestController extends Controller
         $invest->status = "0";
         $invest->no_rek = request("no_rek");
         $invest->opsi_pembayaran = request("opsi_pembayaran");
+        $invest->nama_rek = request("nama_rek");
+        $invest->start_date = $startDate;
+        $invest->end_date = $futureDate;
+        $invest->dividen = sprintf("%.2f", $new_total);;
         $invest->nama_rek = request("nama_rek");
         $invest->image = request("image");
         $invest->save();

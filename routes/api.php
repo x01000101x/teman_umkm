@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\DividenController;
 use App\Http\Controllers\FundController;
 use App\Http\Controllers\InvestController;
 use App\Http\Controllers\OrderController;
@@ -60,6 +61,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/invest', [InvestController::class, 'index']);
     Route::post('/invest/{id}', [InvestController::class, 'create']);
     Route::post('/calculator/{id}', [InvestController::class, 'calculator']);
+
+    //Dividen
+    Route::get('/dividen', [DividenController::class, 'index']);
+    Route::post('/dividen/{id}', [DividenController::class, 'create']);
 
     //Chat
     Route::post('/message', [ChatController::class, 'message']);
