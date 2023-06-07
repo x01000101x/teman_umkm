@@ -22,6 +22,7 @@ class CreateFundsTable extends Migration
             $table->string('end_date');
             $table->string('total_funds');
             $table->string('target_funds');
+            $table->string('profit');
             $table->string('image');
             $table->timestamps();
         });

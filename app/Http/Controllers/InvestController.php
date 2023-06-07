@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fund;
 use App\Models\Invest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,59 +57,35 @@ class InvestController extends Controller
         ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+   public function calculator($id){
+        $fund = new Fund;
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Invest  $invest
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Invest $invest)
-    {
-        //
-    }
+        $getFund = $fund->where('id', $id)->first();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Invest  $invest
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Invest $invest)
-    {
-        //
-    }
+        if (!$getFund) {
+            return response()->json([
+                'message' => 'maaf UMKM tidak ditemukan'
+            ], 403);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Invest  $invest
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Invest $invest)
-    {
-        //
-    }
+        request()->validate([
+            'nominal' => 'required|string',
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Invest  $invest
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Invest $invest)
-    {
-        //
-    }
+        $nominal = request('nominal');
+        $percent = floatval($getFund->profit) / 100;
+
+        $totalFund = floatval($getFund->target_funds) - (floatval($getFund->total_funds) + floatval($nominal));
+        $total = (floatval($getFund->total_funds) + floatval($nominal)) * $percent;
+        $new_total = number_format((float)$total, 2, '.', '');
+        if(floatval($nominal) <= $totalFund){
+            return response()->json([
+                'message' => $new_total,
+            ], 200);
+        } else{
+            return response()->json([
+                'message' => "Melebihi Target Modal UMKM",
+            ], 200);
+        }
+   }
 }

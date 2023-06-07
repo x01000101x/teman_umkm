@@ -58,8 +58,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     //Invest
     Route::get('/invest', [InvestController::class, 'index']);
-    Route::post('invest/{id}', [InvestController::class, 'create']);
+    Route::post('/invest/{id}', [InvestController::class, 'create']);
+    Route::post('/calculator/{id}', [InvestController::class, 'calculator']);
 
+    //Chat
     Route::post('/message', [ChatController::class, 'message']);
 
 });

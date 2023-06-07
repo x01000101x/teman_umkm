@@ -17,6 +17,7 @@ class Fund extends Model
         'end_date',
         'total_funds',
         'target_funds',
+        'profit',
         'image'
     ];
 }
