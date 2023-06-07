@@ -33,8 +33,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/showPost', [PostController::class, 'index']);
     Route::get('/showPost/{id}', [PostController::class, 'showById']);
     Route::post('/showPost', [PostController::class, 'showById']);
-    Route::post('/order/{id}', [PostController::class, 'search']);
+    // Route::post('/order/{id}', [PostController::class, 'search']);
     Route::get('/order/{id}', [OrderController::class, 'index']);
+    Route::post('/order/{id}', [OrderController::class, 'order']);
 
 
     //Logout
@@ -64,7 +65,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     //Dividen
     Route::get('/dividen', [DividenController::class, 'index']);
-    Route::post('/dividen/{id}', [DividenController::class, 'create']);
+    Route::get('/dividen/{id}', [DividenController::class, 'create']);
 
     //Chat
     Route::post('/message', [ChatController::class, 'message']);
