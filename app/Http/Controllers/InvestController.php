@@ -87,7 +87,8 @@ class InvestController extends Controller
 
         return response()->json([
             'message' => 'invest berhasil dibuat! silahkan menunggu approval',
-            'data' => $invest
+            'data' => $invest,
+            'image' => '"http://localhost:8000/storage/" ' . $imageName
         ], 200);
     }
 

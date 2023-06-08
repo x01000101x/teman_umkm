@@ -9,6 +9,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,7 +28,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
-
 
     //Artikel
     Route::get('/showPost', [PostController::class, 'index']);
@@ -60,7 +60,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/admin/dividen_status/{id}', [AdminController::class, 'dividenStatus']);
     Route::post('/admin/order_status/{id}', [AdminController::class, 'orderStatus']);
     Route::post('/admin/invest_status/{id}', [AdminController::class, 'investStatus']);
-    Route::post('/admin/add_post/', [AdminController::class, 'addPost']);
+    Route::post('/admin/add_post', [AdminController::class, 'addPost']);
 
 
     //Funds

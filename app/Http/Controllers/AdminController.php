@@ -275,7 +275,8 @@ class AdminController extends Controller
 
         return response()->json([
             'message' => 'sukses menambah post',
-            'data' => $post
+            'data' => $post,
+            'image' => '"http://localhost:8000/storage/" ' . $imageName
         ], 200);
 
     }

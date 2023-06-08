@@ -62,7 +62,8 @@ class FundController extends Controller
 
         return response()->json([
             'message' => 'crowd funding berhasil dibuat!',
-            'data' => $fund
+            'data' => $fund,
+            'image' => '"http://localhost:8000/storage/" ' . $imageName
         ], 200);
 
     }
