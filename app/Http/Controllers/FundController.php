@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Fund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class FundController extends Controller
 {
@@ -42,6 +45,7 @@ class FundController extends Controller
 
         $id = Auth::id();
 
+        $imageName = Str::random(32).".".request('image')->getClientOriginalExtension();
         $fund = new Fund;
         $fund->user_id = $id;
         $fund->title = request('title');
@@ -50,8 +54,11 @@ class FundController extends Controller
         $fund->end_date = request('end_date');
         $fund->total_funds = request('total_funds');
         $fund->target_funds = request('target_funds');
-        $fund->image = request('image');
+        $fund->image = $imageName;
         $fund->save();
+
+        Storage::disk('public')->put($imageName, file_get_contents(request('image')));
+
 
         return response()->json([
             'message' => 'crowd funding berhasil dibuat!',

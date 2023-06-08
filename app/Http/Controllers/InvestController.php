@@ -7,7 +7,8 @@ use App\Models\Invest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 
 class InvestController extends Controller
@@ -38,6 +39,8 @@ class InvestController extends Controller
             'no_rek' => 'required|string',
             'opsi_pembayaran' => 'required|string',
             'nama_rek' => 'required|string',
+            'image' =>'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
         ]);
 
         $startDate = Carbon::now()->format('d-m-Y');
@@ -63,6 +66,7 @@ class InvestController extends Controller
 
         $user_id = Auth::id();
 
+        $imageName = Str::random(32).".".request('image')->getClientOriginalExtension();
         $invest = new Invest;
         $invest->user_id = $user_id;
         $invest->fund_id = $id;
@@ -75,8 +79,11 @@ class InvestController extends Controller
         $invest->end_date = $futureDate;
         $invest->dividen = sprintf("%.2f", $new_total);;
         $invest->nama_rek = request("nama_rek");
-        $invest->image = request("image");
+        $invest->image = $imageName;
         $invest->save();
+
+        Storage::disk('public')->put($imageName, file_get_contents(request('image')));
+
 
         return response()->json([
             'message' => 'invest berhasil dibuat! silahkan menunggu approval',

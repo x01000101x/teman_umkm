@@ -8,7 +8,10 @@ use App\Models\Order;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
 
 
 class AdminController extends Controller
@@ -256,16 +259,19 @@ class AdminController extends Controller
             'sub_judul' => 'required|string',
             'harga' => 'required|string',
             'kategori' =>'required|string',
-            'gambar' =>'string',
+            'gambar' =>'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
 
+        $imageName = Str::random(32).".".request('gambar')->getClientOriginalExtension();
         $post->judul = request('judul');
         $post->sub_judul = request('sub_judul');
         $post->harga = request('harga');
         $post->kategori = request('kategori');
-        $post->gambar = request('gambar');
+        $post->gambar = $imageName;
         $post->save();
+
+        Storage::disk('public')->put($imageName, file_get_contents(request('gambar')));
 
         return response()->json([
             'message' => 'sukses menambah post',
