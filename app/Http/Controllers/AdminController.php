@@ -248,4 +248,30 @@ class AdminController extends Controller
         ],200);
     }
 
+    public function addPost(){
+        $post = new Post;
+
+        request()->validate([
+            'judul' => 'required|string',
+            'sub_judul' => 'required|string',
+            'harga' => 'required|string',
+            'kategori' =>'required|string',
+            'gambar' =>'string',
+        ]);
+
+
+        $post->judul = request('judul');
+        $post->sub_judul = request('sub_judul');
+        $post->harga = request('harga');
+        $post->kategori = request('kategori');
+        $post->gambar = request('gambar');
+        $post->save();
+
+        return response()->json([
+            'message' => 'sukses menambah post',
+            'data' => $post
+        ], 200);
+
+    }
+
 }
