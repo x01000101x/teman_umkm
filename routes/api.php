@@ -37,7 +37,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // Route::post('/order/{id}', [PostController::class, 'search']);
     Route::get('/order/{id}', [OrderController::class, 'index']);
     Route::post('/order/{id}', [OrderController::class, 'order']);
-    Route::get('/cart', [OrderController::class, 'getCart']);
+    Route::post('/cart', [OrderController::class, 'getCart']);
 
 
     //Logout
