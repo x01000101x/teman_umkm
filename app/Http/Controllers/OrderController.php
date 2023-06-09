@@ -22,48 +22,73 @@ class OrderController extends Controller
        return Post::where('id', $id)->first();
     }
 
-    public function order($id)
+    public function order(Request $request)
     {
+        $data = $request->input();
         $user_id = Auth::id();
         $date = strval(Carbon::now()->getPreciseTimestamp(3));
         $dmy= strval(Carbon::now()->format('d-m-Y'));
-        $id_pesanan = "UMKM-" . $dmy . "-" . $date;
-        $post = Post::where('id', $id)->first();
 
-        // dd($post);
-        $total = floatval(request('jumlah')) * floatval($post->harga);
-
-        $users = new User;
-        $akun = $users->where('id', $user_id)->first();
-
-        $rumus = floatval($akun->saldo) - floatval($total);
-
-        if($rumus >= 0){
+        foreach($data["data"] as $key => $value){
             $order = new Order();
-            $order->id_pesanan = $id;
+            // dd($value["id"]);
+            $id_pesanan = "UMKM-" . $dmy . "-" . $date;
+            $post = Post::where('id', $value["id"])->first();
+            $total = floatval($request->jumlah) * floatval($post->harga);
+            $order->jumlah = $value["jumlah"];
+            $order->email = $value["email"];
+            $order->no_hp = $value["no_hp"];
+            $order->user_id = $user_id;
+            $order->id_pesanan = $value["id"];
             $order->order_id = $id_pesanan;
             $order->judul = $post->judul;
-            $order->jumlah = request('jumlah');
             $order->total = $total;
             $order->status = "0";
-            $order->no_hp = request('no_hp');
-            $order->email = request('email');
-
             $order->save();
 
-            return response()->json([
-                'message' => "success",
-                'data' => $order
-            ], 200);
-
-        }else{
-            return response()->json([
-                'message' => "maaf saldo tidak cukup mohon topup",
-            ], 403);
         }
 
+        return response()->json([
+            'message' => "success",
+            'data' => $data
+        ], 200);
 
-    }
+        // dd($post);
+
+        // $users = new User;
+        // $akun = $users->where('id', $user_id)->first();
+
+        // $rumus = floatval($akun->saldo) - floatval($total);
+
+        // $answers = [];
+        // for ($i = 0; $i < count($request->data); $i++) {
+        //     $answers[] = [
+
+        // ];
+        // if($rumus >= 0){
+            // $order->order_id = $id_pesanan;
+            // $order->judul = $post->judul;
+            // $order->jumlah = request('jumlah');
+            // $order->total = $total;
+            // $order->status = "0";
+            // $order->no_hp = request('no_hp');
+            // $order->email = request('email');
+
+            // $order->save();
+            // Order::insert($answers);
+
+
+
+
+        }
+
+        // }else{
+        //     return response()->json([
+        //         'message' => "maaf saldo tidak cukup mohon topup",
+        //     ], 403);
+        // }
+
+
 
     public function getCart(){
         request()->validate([

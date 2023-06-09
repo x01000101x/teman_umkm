@@ -36,7 +36,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/showPost', [PostController::class, 'showById']);
     // Route::post('/order/{id}', [PostController::class, 'search']);
     Route::get('/order/{id}', [OrderController::class, 'index']);
-    Route::post('/order/{id}', [OrderController::class, 'order']);
+    Route::post('/order', [OrderController::class, 'order']);
     Route::post('/cart', [OrderController::class, 'getCart']);
 
 
