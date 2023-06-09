@@ -55,6 +55,7 @@ class FundController extends Controller
         $fund->total_funds = request('total_funds');
         $fund->target_funds = request('target_funds');
         $fund->image = $imageName;
+        $fund->profit = request('profit');
         $fund->save();
 
         Storage::disk('public')->put($imageName, file_get_contents(request('image')));
