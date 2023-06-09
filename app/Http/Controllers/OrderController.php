@@ -112,4 +112,22 @@ class OrderController extends Controller
         ], 200);
     }
 
+    public function getByEmail(){
+        $order = new Order;
+
+        $data = request("email");
+
+        $search = $order->where('email', $data)->get();
+
+        if(!$search){
+            return response()->json([
+                'data' => 'pesanan tidak ada'
+            ], 403);
+        }
+
+        return response()->json([
+            'data' => $search
+        ], 200);
+    }
+
 }
