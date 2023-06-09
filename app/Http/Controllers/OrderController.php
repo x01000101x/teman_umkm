@@ -65,4 +65,26 @@ class OrderController extends Controller
 
     }
 
+    public function getCart(){
+        request()->validate([
+            'id' => 'required|array',
+        ]);
+
+        $post = new Post;
+
+        $datas = request("id");
+
+        $search = $post->whereIn('id', $datas)->get();
+
+        if(!$search){
+            return response()->json([
+                'data' => 'pesanan tidak ada'
+            ], 403);
+        }
+
+        return response()->json([
+            'data' => $search
+        ], 200);
+    }
+
 }
