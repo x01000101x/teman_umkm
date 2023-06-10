@@ -75,6 +75,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     //Invest
     Route::get('/invest', [InvestController::class, 'index']);
+    Route::get('/invest/{id}', [InvestController::class, 'getInvestById']);
     Route::post('/invest/{id}', [InvestController::class, 'create']);
     Route::post('/calculator/{id}', [InvestController::class, 'calculator']);
 

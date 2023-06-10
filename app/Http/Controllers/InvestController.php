@@ -22,9 +22,29 @@ class InvestController extends Controller
     {
         $invest = Invest::get();
 
+        if(!$invest){
+            return response()->json([
+                'message' => 'invests not found'
+            ], 404);
+        }
+
         return response()->json([
             'message' => $invest
-        ]);
+        ], 200);
+    }
+
+    public function getInvestById($id){
+        $invest = Invest::where('id', $id)->first();
+
+        if(!$invest){
+            return response()->json([
+                'message' => 'invest not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'data' => $invest
+        ], 200);
     }
 
     /**
