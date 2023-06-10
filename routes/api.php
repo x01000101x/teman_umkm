@@ -68,6 +68,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     //Funds
     Route::get('/funds', [FundController::class, 'index']);
+    Route::get('/funds/{id}', [FundController::class, 'getFundById']);
     Route::post('/funds/post', [FundController::class, 'create']);
     Route::post('/funds/post/{id}', [FundController::class, 'cair']);
 

@@ -25,6 +25,15 @@ class FundController extends Controller
         ]);
     }
 
+    public function getFundById($id)
+    {
+       $funds = Fund::where('id', $id)->first();
+
+        return response()->json([
+            'message' => $funds
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
