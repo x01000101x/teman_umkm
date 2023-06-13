@@ -117,7 +117,7 @@ class OrderController extends Controller
 
         $data = request("email");
 
-        $search = $order->where('email', $data)->get();
+        $search = $order->join('posts', 'orders.id_pesanan', '=', 'posts.id')->where('email', $data)->get();
 
         if(!$search){
             return response()->json([
