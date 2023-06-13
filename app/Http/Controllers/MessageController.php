@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,17 +13,33 @@ class MessageController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response s
      */
     public function index()
     {
         $id = Auth::id();
-        $data = Message::where('receiver_id', $id)->get();
-
+        $datas = Message::where('receiver_id', $id)->get()->toArray();
+        foreach ($datas as $data => $value) {
+            $datar = User::where('id', $value['sender_id'])->first();
+            array_push($datas[$data],$datar['nama']);
+        }
         return response()->json([
-            'message' => $data,
+            'message' => $datas,
+            // 'sender' => $sender->nama
 
         ]);
+
+    }
+
+     public function getById($id)
+    {
+        $datas = Message::where('id', $id)->first()->toArray();
+        $datas["sender"] = User::where('id', $datas['sender_id'])->select('nama')->first();
+        return response()->json([
+            'message' => $datas,
+
+        ]);
+
     }
 
     /**

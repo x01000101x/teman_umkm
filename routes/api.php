@@ -85,6 +85,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     //Message
     Route::get('/chats', [MessageController::class, 'index']);
+    Route::get('/chats/{id}', [MessageController::class, 'getById']);
     Route::post('/chats/{id}', [MessageController::class, 'create']);
 
     //UNUSED
