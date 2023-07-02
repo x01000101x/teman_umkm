@@ -51,6 +51,7 @@ class FundController extends Controller
             'target_funds' => 'required|string',
             'email' => 'required|string',
             'no_telp' => 'required|string',
+            'kategori' => 'required|string',
             'identitas_bisnis' => 'required',
             'proposal' => 'required',
             'image' => 'required'
@@ -109,6 +110,7 @@ class FundController extends Controller
         $fund->target_funds = request('target_funds');
         $fund->email = request('email');
         $fund->no_telp = request('no_telp');
+        $fund->kategori = request('kategori');
         $fund->proposal = $imageName3;
         $fund->identitas_bisnis = $imageName2;
         $fund->image = $imageName;
