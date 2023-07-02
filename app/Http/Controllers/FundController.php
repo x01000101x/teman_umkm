@@ -49,12 +49,56 @@ class FundController extends Controller
             'end_date' => 'required|string',
             'total_funds' => 'required|string',
             'target_funds' => 'required|string',
-            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
+            'email' => 'required|string',
+            'no_telp' => 'required|string',
+            'identitas_bisnis' => 'required',
+            'proposal' => 'required',
+            'image' => 'required'
         ]);
 
         $id = Auth::id();
 
-        $imageName = Str::random(32).".".request('image')->getClientOriginalExtension();
+        $image_64 = request('image'); //your base64 encoded data
+        $image_binis = request('identitas_bisnis'); //your base64 encoded data
+        $image_proposal = request('proposal'); //your base64 encoded data
+
+
+        $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
+
+        $replace = substr($image_64, 0, strpos($image_64, ',')+1);
+
+        //Identitas Bisnis
+        $image_binis = request('identitas_bisnis'); //your base64 encoded data
+
+        $extension2 = explode('/', explode(':', substr($image_binis, 0, strpos($image_binis, ';')))[1])[1];   // .jpg .png .pdf
+
+        $replace = substr($image_binis, 0, strpos($image_binis, ',')+1);
+
+         //Proposal
+         $image_proposal = request('proposal'); //your base64 encoded data
+
+         $extension3 = explode('/', explode(':', substr($image_proposal, 0, strpos($image_proposal, ';')))[1])[1];   // .jpg .png .pdf
+
+         $replace = substr($image_proposal, 0, strpos($image_proposal, ',')+1);
+
+      // find substring fro replace here eg: data:image/png;base64,
+
+       $image = str_replace($replace, '', $image_64);
+       $image2 = str_replace($replace, '', $image_binis);
+       $image3 = str_replace($replace, '', $image_proposal);
+
+
+       $image = str_replace(' ', '+', $image);
+       $image2 = str_replace(' ', '+', $image2);
+       $image3 = str_replace(' ', '+', $image3);
+
+
+       $imageName = Str::random(10).'.'.$extension;
+       $imageName2 = Str::random(10).'.'.$extension2;
+       $imageName3 = Str::random(10).'.'.$extension3;
+
+
+        // $imageName = Str::random(32).".".request('image')->getClientOriginalExtension();
         $fund = new Fund;
         $fund->user_id = $id;
         $fund->title = request('title');
@@ -63,11 +107,18 @@ class FundController extends Controller
         $fund->end_date = request('end_date');
         $fund->total_funds = request('total_funds');
         $fund->target_funds = request('target_funds');
+        $fund->email = request('email');
+        $fund->no_telp = request('no_telp');
+        $fund->proposal = $imageName3;
+        $fund->identitas_bisnis = $imageName2;
         $fund->image = $imageName;
         $fund->profit = request('profit');
         $fund->save();
 
-        Storage::disk('public')->put($imageName, file_get_contents(request('image')));
+        Storage::disk('public')->put($imageName2, base64_decode($image2));
+        Storage::disk('public')->put($imageName3, base64_decode($image3));
+        Storage::disk('public')->put($imageName, base64_decode($image));
+
 
 
         return response()->json([
