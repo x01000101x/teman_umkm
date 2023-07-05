@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dividen;
+use App\Models\Fund;
 use App\Models\Invest;
 use App\Models\Order;
 use App\Models\Post;
@@ -245,6 +246,37 @@ class AdminController extends Controller
 
         $getinvest->status = request('status');
         $getinvest->update();
+
+        return response()->json([
+            'message' => "berhasil di ubah status = " . request("status")
+        ],200);
+    }
+
+
+    public function fundStatus($id){
+        $fund = new Fund;
+
+        $validator = Validator::make(request()->all(), [
+            'status' => 'required'
+        ]);
+
+
+         if ($validator->fails()) {
+             return response()->json([
+                'message' => 'please complete the form'
+            ], 403);
+           }
+
+        $getfund = $fund->where('id', $id)->first();
+
+        if (!$getfund){
+            return response()->json([
+                'message' => 'fund not found'
+            ],404);
+        }
+
+        $getfund->status = request('status');
+        $getfund->update();
 
         return response()->json([
             'message' => "berhasil di ubah status = " . request("status")

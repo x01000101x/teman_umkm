@@ -63,7 +63,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/admin/dividen_status/{id}', [AdminController::class, 'dividenStatus']);
     Route::post('/admin/order_status/{id}', [AdminController::class, 'orderStatus']);
     Route::post('/admin/invest_status/{id}', [AdminController::class, 'investStatus']);
+    Route::post('/admin/fund_status/{id}', [AdminController::class, 'fundStatus']);
     Route::post('/admin/add_post', [AdminController::class, 'addPost']);
+
 
 
     //Funds
