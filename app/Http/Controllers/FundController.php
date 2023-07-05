@@ -176,6 +176,36 @@ class FundController extends Controller
         ], 200);
     }
 
+    public function getByStatus(){
+
+        $auth = Auth::id();
+
+        $user = new User;
+        $fund = new Fund;
+
+        $search = $user->where('id', $auth)->first();
+
+        $getFund = $fund->where('user_id', $search->id)->first();
+
+        if(!$getFund){
+            return response()->json([
+                'data' => 'fund tidak ada'
+            ], 403);
+        }
+
+        if ($getFund->status == "0" || $getFund->status == "1"){
+            return response()->json([
+                'data' => $getFund->status
+            ], 200);
+        }
+
+        return response()->json([
+            'data' => 'fund tidak ada'
+        ], 403);
+
+
+    }
+
     public function invest(){
 
     }
