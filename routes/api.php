@@ -71,6 +71,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/funds/{id}', [FundController::class, 'getFundById']);
     Route::post('/funds/post', [FundController::class, 'create']);
     Route::post('/funds/post/{id}', [FundController::class, 'cair']);
+    Route::post('/funds/getByEmail', [FundController::class, 'getByEmail']);
 
 
     //Invest

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fund;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -52,6 +53,7 @@ class FundController extends Controller
             'email' => 'required|string',
             'no_telp' => 'required|string',
             'kategori' => 'required|string',
+            'alamat' => 'required|string',
             'identitas_bisnis' => 'required',
             'proposal' => 'required',
             'image' => 'required'
@@ -111,6 +113,7 @@ class FundController extends Controller
         $fund->email = request('email');
         $fund->no_telp = request('no_telp');
         $fund->kategori = request('kategori');
+        $fund->alamat = request('alamat');
         $fund->proposal = $imageName3;
         $fund->identitas_bisnis = $imageName2;
         $fund->image = $imageName;
@@ -152,6 +155,25 @@ class FundController extends Controller
             'message' => 'nominal terlalu besar!',
         ], 403);
     }
+    }
+
+    public function getByEmail(){
+
+        $auth = Auth::id();
+
+        $user = new User;
+
+        $search = $user->where('id', $auth)->first();
+
+        if(!$search){
+            return response()->json([
+                'data' => 'pesanan tidak ada'
+            ], 403);
+        }
+
+        return response()->json([
+            'data' => $search
+        ], 200);
     }
 
     public function invest(){
