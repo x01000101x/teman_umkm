@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/admin/users', [AdminController::class, 'index']);
     Route::get('/admin/invests', [AdminController::class, 'invest']);
     Route::get('/admin/dividens', [AdminController::class, 'dividen']);
+    Route::get('/admin/funds', [AdminController::class, 'fund']);
     Route::get('/admin/orders', [AdminController::class, 'order']);
     Route::get('/admin/users/{id}', [AdminController::class, 'userById']);
     Route::post('/admin/topup/{id}', [AdminController::class, 'isiSaldo']);

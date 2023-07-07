@@ -81,6 +81,22 @@ class AdminController extends Controller
         ],200);
     }
 
+     public function fund(){
+        $fund = new Fund;
+
+        $showall = $fund->all();
+
+        if (!$showall){
+            return response()->json([
+                'message' => 'fund not found'
+            ],404);
+        }
+
+        return response()->json([
+            'message' => $showall
+        ],200);
+    }
+
     public function userById($id){
         $user = new User;
 
