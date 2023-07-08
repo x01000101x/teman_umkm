@@ -193,7 +193,7 @@ class FundController extends Controller
             ], 403);
         }
 
-        if ($getFund->status == "0" || $getFund->status == "1"){
+        if ($getFund->status == "1"){
             return response()->json([
                 'data' => $getFund->status
             ], 200);
