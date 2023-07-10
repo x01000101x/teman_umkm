@@ -425,12 +425,24 @@ class AdminController extends Controller
 
     public function ChangeStatusCairInvest($id){
         $fund = new Invest;
+        $shock = new Fund;
 
         $showall = $fund->where("id", $id)->first();
+        $getFund = $shock->where("id", $showall->fund_id)->first();
 
         $showall->update([
             'is_cair'     => request("status"),
         ]);
+
+        if (request("status") == "1"){
+            $xyz = (floatval($getFund->total_funds) + floatval($showall->nominal));
+            $newxyz = number_format((float)$xyz, 2, '.', '');
+            $getFund->update([
+                'total_funds'     => $newxyz,
+            ]);
+
+        }
+
 
         if (!$showall){
             return response()->json([

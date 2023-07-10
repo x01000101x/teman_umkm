@@ -83,14 +83,7 @@ class InvestController extends Controller
         $total = (floatval($getFund->total_funds) + floatval($nominal)) * $percent;
         $new_total = number_format((float)$total, 2, '.', '');
 
-        $xyz = (floatval($getFund->total_funds) + floatval($nominal));
-        $newxyz = number_format((float)$xyz, 2, '.', '');
-
-
         $user_id = Auth::id();
-
-        $getFund->total_funds = $newxyz;
-        $getFund->update();
 
         $invest = new Invest;
         $invest->user_id = $user_id;
@@ -175,6 +168,7 @@ class InvestController extends Controller
     $funds = $fund->where('id', $id)->first();
         $funds->update([
         'is_cair'     => "0",
+
     ]);
     return response()->json([
         'message' => 'berhasil cair!',
