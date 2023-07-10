@@ -66,6 +66,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/admin/invest_status/{id}', [AdminController::class, 'investStatus']);
     Route::post('/admin/fund_status/{id}', [AdminController::class, 'fundStatus']);
     Route::post('/admin/add_post', [AdminController::class, 'addPost']);
+    Route::post('/admin/getListCair', [AdminController::class, 'GetListCair']);
 
 
 
@@ -85,6 +86,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/invest/{id}', [InvestController::class, 'getInvestById']);
     Route::post('/invest/{id}', [InvestController::class, 'create']);
     Route::post('/calculator/{id}', [InvestController::class, 'calculator']);
+    Route::post('/invest/{id}', [InvestController::class, 'cair']);
 
     //Dividen
     Route::get('/dividen', [DividenController::class, 'index']);

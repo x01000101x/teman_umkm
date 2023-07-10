@@ -329,4 +329,22 @@ class AdminController extends Controller
 
     }
 
+    public function GetListCair(){
+        $fund = new Fund;
+
+        $showall = $fund->whereNotNull("is_cair")->get();
+
+        if (!$showall){
+            return response()->json([
+                'message' => 'belum ada yg cair'
+            ],404);
+        }
+
+        return response()->json([
+            'message' => $showall
+        ],200);
+
+
+    }
+
 }
