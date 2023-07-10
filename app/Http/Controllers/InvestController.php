@@ -139,41 +139,62 @@ class InvestController extends Controller
         }
    }
 
-   public function invests(){
-    $id = Auth::id();
-    $datas = Invest::where('user_id', $id)->get()->toArray();
-    foreach ($datas as $data => $value) {
-        $datar = Fund::where('id', $value['fund_id'])->first();
-        array_push($datas[$data],$datar['title']);
-        array_push($datas[$data],$datar['target_funds']);
-        array_push($datas[$data],$datar['image']);
+    public function invests(){
+        $id = Auth::id();
+        $datas = Invest::where('user_id', $id)->get()->toArray();
+        foreach ($datas as $data => $value) {
+            $datar = Fund::where('id', $value['fund_id'])->first();
+            array_push($datas[$data],$datar['title']);
+            array_push($datas[$data],$datar['target_funds']);
+            array_push($datas[$data],$datar['image']);
+
+
+        }
+
+        return response()->json([
+            'message' => $datas,
+            // 'sender' => $sender->nama
+
+        ]);
+    }
+
+    public function cair($id){
+        request()->validate([
+            'nominal' => 'required|string',
+        ]);
+
+        $fund = new Invest;
+
+        $funds = $fund->where('id', $id)->first();
+            $funds->update([
+            'is_cair'     => "0",
+
+        ]);
+        return response()->json([
+            'message' => 'berhasil cair!',
+            'data' => $funds
+        ], 200);
+    }
+
+
+    public function getListPengajuan(){
+        $invest = new Invest;
+
+        $id = Auth::id();
+
+        $showall = $invest->where("user_id", $id)->where("is_cair", "0")->get();
+
+        if (!$showall){
+            return response()->json([
+                'message' => 'belum ada yg cair'
+            ],404);
+        }
+
+        return response()->json([
+            'message' => $showall
+        ],200);
 
 
     }
-
-    return response()->json([
-        'message' => $datas,
-        // 'sender' => $sender->nama
-
-    ]);
-   }
-
-   public function cair($id){
-    request()->validate([
-        'nominal' => 'required|string',
-    ]);
-
-    $fund = new Invest;
-
-    $funds = $fund->where('id', $id)->first();
-        $funds->update([
-        'is_cair'     => "0",
-
-    ]);
-    return response()->json([
-        'message' => 'berhasil cair!',
-        'data' => $funds
-    ], 200);
-}
 }
 
