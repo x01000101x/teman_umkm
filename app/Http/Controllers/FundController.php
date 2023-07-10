@@ -222,6 +222,26 @@ class FundController extends Controller
 
     }
 
+    public function getListPengajuan(){
+        $invest = new Fund;
+
+        $id = Auth::id();
+
+        $showall = $invest->where("user_id", $id)->where("is_cair", "0")->get();
+
+        if (!$showall){
+            return response()->json([
+                'message' => 'belum ada yg cair'
+            ],404);
+        }
+
+        return response()->json([
+            'message' => $showall
+        ],200);
+
+
+    }
+
     public function invest(){
 
     }
