@@ -162,8 +162,11 @@ class FundController extends Controller
         $auth = Auth::id();
 
         $user = new User;
+        $fund = new Fund;
 
         $search = $user->where('id', $auth)->first();
+
+        $getFund = $fund->where('user_id', $search->id)->first();
 
         if(!$search){
             return response()->json([
@@ -171,9 +174,21 @@ class FundController extends Controller
             ], 403);
         }
 
+        if(!$getFund){
+            return response()->json([
+                'data' => 'fund tidak ada'
+            ], 403);
+        }
+
+        if ($getFund->status == "1"){
+            return response()->json([
+                'data' => $getFund
+            ], 200);
+        }
+
         return response()->json([
-            'data' => $search
-        ], 200);
+            'data' => 'fund tidak ada'
+        ], 403);
     }
 
     public function getByStatus(){
