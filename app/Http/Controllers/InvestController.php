@@ -143,6 +143,14 @@ class InvestController extends Controller
    public function invests(){
     $id = Auth::id();
     $datas = Invest::where('user_id', $id)->get()->toArray();
+    foreach ($datas as $data => $value) {
+        $datar = Fund::where('id', $value['fund_id'])->first();
+        array_push($datas[$data],$datar['title']);
+        array_push($datas[$data],$datar['target_funds']);
+        array_push($datas[$data],$datar['image']);
+
+
+    }
 
     return response()->json([
         'message' => $datas,
