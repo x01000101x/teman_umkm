@@ -59,7 +59,7 @@ class InvestController extends Controller
             'no_rek' => 'required|string',
             'opsi_pembayaran' => 'required|string',
             'nama_rek' => 'required|string',
-            'image' =>'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
 
         ]);
 
@@ -86,7 +86,6 @@ class InvestController extends Controller
 
         $user_id = Auth::id();
 
-        $imageName = Str::random(32).".".request('image')->getClientOriginalExtension();
         $invest = new Invest;
         $invest->user_id = $user_id;
         $invest->fund_id = $id;
@@ -99,16 +98,13 @@ class InvestController extends Controller
         $invest->end_date = $futureDate;
         $invest->dividen = sprintf("%.2f", $new_total);;
         $invest->nama_rek = request("nama_rek");
-        $invest->image = $imageName;
+        $invest->image = "";
         $invest->save();
-
-        Storage::disk('public')->put($imageName, file_get_contents(request('image')));
-
 
         return response()->json([
             'message' => 'invest berhasil dibuat! silahkan menunggu approval',
             'data' => $invest,
-            'image' => '"http://localhost:8000/storage/" ' . $imageName
+            'image' => '"http://localhost:8000/storage/" '
         ], 200);
     }
 
@@ -142,5 +138,16 @@ class InvestController extends Controller
                 'message' => "Melebihi Target Modal UMKM",
             ], 200);
         }
+   }
+
+   public function invests(){
+    $id = Auth::id();
+    $datas = Invest::where('user_id', $id)->get()->toArray();
+
+    return response()->json([
+        'message' => $datas,
+        // 'sender' => $sender->nama
+
+    ]);
    }
 }
