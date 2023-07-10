@@ -240,6 +240,7 @@ class AdminController extends Controller
 
     public function investStatus($id){
         $invest = new Invest;
+        $fund = new Fund;
 
         $validator = Validator::make(request()->all(), [
             'status' => 'required'
@@ -253,11 +254,20 @@ class AdminController extends Controller
            }
 
         $getinvest = $invest->where('id', $id)->first();
+        $getFund = $fund->where('id', $getinvest->fund_id)->first();
 
         if (!$getinvest){
             return response()->json([
                 'message' => 'invest not found'
             ],404);
+        }
+
+        if (request('status') == "1"){
+            $xyz = (floatval($getFund->total_funds) + floatval($getinvest->nominal));
+            $newxyz = number_format((float)$xyz, 2, '.', '');
+            $getFund->update([
+                'total_funds'     => $newxyz,
+            ]);
         }
 
         $getinvest->status = request('status');
@@ -434,14 +444,14 @@ class AdminController extends Controller
             'is_cair'     => request("status"),
         ]);
 
-        if (request("status") == "1"){
-            $xyz = (floatval($getFund->total_funds) + floatval($showall->nominal));
-            $newxyz = number_format((float)$xyz, 2, '.', '');
-            $getFund->update([
-                'total_funds'     => $newxyz,
-            ]);
+        // if (request("status") == "1"){
+        //     $xyz = (floatval($getFund->total_funds) + floatval($showall->nominal));
+        //     $newxyz = number_format((float)$xyz, 2, '.', '');
+        //     $getFund->update([
+        //         'total_funds'     => $newxyz,
+        //     ]);
 
-        }
+        // }
 
 
         if (!$showall){
