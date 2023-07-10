@@ -67,7 +67,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/admin/fund_status/{id}', [AdminController::class, 'fundStatus']);
     Route::post('/admin/add_post', [AdminController::class, 'addPost']);
     Route::post('/admin/getListCair', [AdminController::class, 'GetListCair']);
-
+    Route::post('/admin/getListCair/{id}', [AdminController::class, 'GetListCairById']);
+    Route::post('/admin/ChangeStatusCair/{id}', [AdminController::class, 'ChangeStatusCair']);
 
 
     //Funds

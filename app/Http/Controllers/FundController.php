@@ -144,7 +144,7 @@ class FundController extends Controller
         $funds = $fund->where('id', $id)->first();
         if (intval($funds->total_funds) - intval(request('nominal'))  >= 0){
             $funds->update([
-            'is_cair'     => request('nominal'),
+            'is_cair'     => "0",
         ]);
         return response()->json([
             'message' => 'berhasil cair!',
