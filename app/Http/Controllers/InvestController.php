@@ -164,4 +164,22 @@ class InvestController extends Controller
 
     ]);
    }
+
+   public function cair($id){
+    request()->validate([
+        'nominal' => 'required|string',
+    ]);
+
+    $fund = new Invest;
+
+    $funds = $fund->where('id', $id)->first();
+        $funds->update([
+        'is_cair'     => "0",
+    ]);
+    return response()->json([
+        'message' => 'berhasil cair!',
+        'data' => $funds
+    ], 200);
 }
+}
+

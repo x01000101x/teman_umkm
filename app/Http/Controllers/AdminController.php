@@ -332,7 +332,7 @@ class AdminController extends Controller
     public function GetListCair(){
         $fund = new Fund;
 
-        $showall = $fund->where("status", "0")->get();
+        $showall = $fund->where("is_cair", "0")->get();
 
         if (!$showall){
             return response()->json([
@@ -367,6 +367,64 @@ class AdminController extends Controller
 
     public function ChangeStatusCair($id){
         $fund = new Fund;
+
+        $showall = $fund->where("id", $id)->first();
+
+        $showall->update([
+            'is_cair'     => request("status"),
+        ]);
+
+        if (!$showall){
+            return response()->json([
+                'message' => 'belum ada yg cair'
+            ],404);
+        }
+
+        return response()->json([
+            'message' => $showall
+        ],200);
+
+
+    }
+
+    public function GetListCairInvest(){
+        $fund = new Invest;
+
+        $showall = $fund->where("is_cair", "0")->get();
+
+        if (!$showall){
+            return response()->json([
+                'message' => 'belum ada yg cair'
+            ],404);
+        }
+
+        return response()->json([
+            'message' => $showall
+        ],200);
+
+
+    }
+
+    public function GetListCairByIdInvest($id){
+        $fund = new Invest;
+
+        $showall = $fund->where("id", $id)->first();
+
+        if (!$showall){
+            return response()->json([
+                'message' => 'belum ada yg cair'
+            ],404);
+        }
+
+        return response()->json([
+            'message' => $showall
+        ],200);
+
+
+    }
+
+    public function ChangeStatusCairInvest($id){
+        $fund = new Invest;
 
         $showall = $fund->where("id", $id)->first();
 
