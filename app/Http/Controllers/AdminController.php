@@ -342,7 +342,7 @@ class AdminController extends Controller
     public function GetListCair(){
         $fund = new Fund;
 
-        $showall = $fund->where("is_cair", "0")->get();
+        $showall = $fund->get();
 
         if (!$showall){
             return response()->json([

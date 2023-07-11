@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fund;
+use App\Models\Invest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -223,11 +224,27 @@ class FundController extends Controller
     }
 
     public function getListPengajuan(){
-        $invest = new Fund;
+        $fund = new Fund;
+
 
         $id = Auth::id();
 
-        $showall = $invest->where("user_id", $id)->where("is_cair", "0")->get();
+        $alphabeticKeys = range('a', 'z'); // Generate an array of alphabetic keys
+
+        $showall = $fund->where("user_id", $id)->get()->toArray();
+        foreach ($showall as $data => $value) {
+            $datar = Invest::where('fund_id', $value['id'])->first();
+           $key = $alphabeticKeys[$data]; // Get the alphabetic key from the array
+    $showall[$key] = $showall[$data]; // Assign the value to the new alphabetic key
+    unset($showall[$data]); // Remove the old numeric key
+
+    // Append additional data to the array
+    $showall[$key]['no_rek'] = $datar['no_rek'];
+    $showall[$key]['nama_rek'] = $datar['nama_rek'];
+    $showall[$key]['opsi_pembayaran'] = $datar['opsi_pembayaran'];
+
+
+        }
 
         if (!$showall){
             return response()->json([
